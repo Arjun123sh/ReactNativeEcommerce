@@ -20,7 +20,7 @@ const ProductSchemma=new mongoose.Schema({
     },
     ImageUrl:{
         type:String,
-        required:true,
+        // required:true,
     },
     price:{
         default:0,

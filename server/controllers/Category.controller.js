@@ -92,9 +92,9 @@ const GetById = async (req, res) => {
 const UpdateCategory = async (req, res) => {
     try {
         const { id, newCategoryName } = req.body;
-        const response=await Category.updateOne(
-            { _id:new mongoose.Types.ObjectId(id) },
-            { $set: { categoryName: newCategoryName } }
+        const response = await Category.updateOne(
+            { _id: new mongoose.Types.ObjectId(id), },
+            { $set: { categoryName: newCategoryName, } }
         );
         console.log("Response is ", response);
         return res.status(200).json({
@@ -110,15 +110,15 @@ const UpdateCategory = async (req, res) => {
     }
 }
 
-const DeleteCategoryById=async(req,res)=>{
-    try{
-        const id=req.params.id;
+const DeleteCategoryById = async (req, res) => {
+    try {
+        const id = req.params.id;
         await Category.findByIdAndDelete(new mongoose.Types.ObjectId(id));
         return res.status(200).json({
-            success:true
+            success: true
         })
     }
-    catch(err){
+    catch (err) {
         return res.status(500).json({
             success: false,
             message: err.message,
