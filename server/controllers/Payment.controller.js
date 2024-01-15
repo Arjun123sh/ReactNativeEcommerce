@@ -4,7 +4,7 @@ import { Users } from "../models/Users.js";
 import { Products } from "../models/Products.js";
 import mongoose from "mongoose";
 import crypto from "crypto";
-
+import { constants } from "../constants.js";
 
 const razorpayCheckout = async (req, res) => {
     const { products } = req.body;
@@ -23,7 +23,7 @@ const razorpayCheckout = async (req, res) => {
             }
 
             total_amount += course.price
-            
+
         } catch (error) {
             console.log(error)
             return res.status(500).json({ success: false, message: error.message })
@@ -47,7 +47,7 @@ const razorpayCheckout = async (req, res) => {
     }
 }
 
-exports.verifyPayment = async (req, res) => {
+const verifyPayment = async (req, res) => {
     console.log(req.body)
     const razorpay_order_id = req.body?.razorpay_order_id
     const razorpay_payment_id = req.body?.razorpay_payment_id
@@ -63,24 +63,23 @@ exports.verifyPayment = async (req, res) => {
       !courses ||
       !userId
     ) {
-      return res.status(200).json({ success: false, message: "Payment Failed" })
+      return res.status(200).json({ success: false, message: "Payment Failed" });
     }
   
     let body = razorpay_order_id + "|" + razorpay_payment_id
   
     const expectedSignature = crypto
-      .createHmac("sha256", process.env.RAZORPAY_SECRET)
+      .createHmac("sha256", constants.RAZORPAY_SECRET)
       .update(body.toString())
       .digest("hex")
   
     if (expectedSignature === razorpay_signature) {
-      return res.status(200).json({ success: true, message: "Payment Verified" })
+      return res.status(200).json({ success: true, message: "Payment Verified" });
     }
-  
-    return res.status(200).json({ success: false, message: "Payment Failed" })
-  }
-  
+    return res.status(200).json({ success: false, message: "Payment Failed" });
+}
 
 export {
     razorpayCheckout,
+    verifyPayment,
 }

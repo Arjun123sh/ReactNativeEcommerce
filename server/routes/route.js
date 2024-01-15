@@ -2,8 +2,9 @@ import {createCategory,GetAllCategories,GetById,UpdateCategory,DeleteCategoryByI
 import {CreateUser,LoginUser} from "../controllers/Auth.controller.js"
 import { AddProduct,GetAllProducts,DeletePrduct,GetProductsByCategory,GetProductById,UpdateProducts } from "../controllers/Product.controller.js";
 import {createAddress,UpdateAddress,getAddressById,DeleteAddress} from "../controllers/Address.controller.js"
+import {verifyPayment,razorpayCheckout} from "../controllers/Payment.controller.js";
+import {AddItemToCart,removeItemfromCart,clearCart,getCartItems} from "../controllers/Cart.controller.js";
 import express from "express";
-
 
 const router = express.Router();
 
@@ -28,6 +29,13 @@ router.post("/createAddress",createAddress)
       .put("/UpdateAddress",UpdateAddress)
       .delete("/DeleteAddress",DeleteAddress);
 
+router.post("/capturePayment",razorpayCheckout)      
+      .post("/verifyPayment",verifyPayment);
+
+router.post("/AddItemToCart",AddItemToCart)
+      .put("/removeItemFromCart",removeItemfromCart)
+      .delete("/clearCart",clearCart)      
+      .get("/GetCartItems",getCartItems);
 
 const route=router;
 export default route;
